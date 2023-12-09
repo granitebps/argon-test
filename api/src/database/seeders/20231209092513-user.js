@@ -14,9 +14,9 @@ module.exports = {
           email: 'granitebagas28@gmail.com',
           password: passHash,
           image: 'avatar.jpg',
-          position: 'Full Stack Engineer',
+          position: 'Admin',
           phone: '081319144618',
-          role: 'user',
+          role: 'admin',
         },
       ],
       {}

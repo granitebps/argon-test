@@ -42,4 +42,23 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-module.exports = { verifyToken };
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+const verifyRole = (role) => {
+  return async (req, res, next) => {
+    const user = req.auth;
+    if (user.role == role) {
+      next();
+    } else {
+      res.status(403).json({
+        success: false,
+        message: 'Forbidden',
+      });
+    }
+  };
+};
+
+module.exports = { verifyToken, verifyRole };

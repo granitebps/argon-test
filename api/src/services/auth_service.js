@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { User } = require('../models/index');
 const bcrypt = require('bcrypt');
+const amqp = require('amqplib');
 
 /**
  *
@@ -102,7 +103,25 @@ const updateProfile = async (req, res) => {
 
   // TODO: Notification
 
-  // TODO: Logging
+  // Logging
+  const updatedUser = await User.findByPk(req.auth.id);
+  const message = {
+    user: {
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      image: updatedUser.image,
+      position: updatedUser.position,
+      phone: updatedUser.phone,
+    },
+  };
+  const { RABBIT_MQ_USERNAME, RABBIT_MQ_PASSWORD, RABBIT_MQ_HOST } = process.env;
+  const connection = await amqp.connect(`amqp://${RABBIT_MQ_USERNAME}:${RABBIT_MQ_PASSWORD}@${RABBIT_MQ_HOST}`);
+  const channel = await connection.createChannel();
+  await channel.assertQueue('logging', { durable: false });
+  channel.sendToQueue('logging', Buffer.from(JSON.stringify(message)));
+  console.log(' [x] Sent ', message);
+  await channel.close();
 
   res.json({
     success: true,

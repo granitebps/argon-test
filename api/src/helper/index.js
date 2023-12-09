@@ -3,11 +3,11 @@ const { extname } = require('path');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/images/');
+    cb(null, 'public/');
   },
   filename: function (req, file, cb) {
     let fileName = file.originalname.split('.');
-    let savedFileName = `${fileName[0]}-${Date.now()}${extname(file.originalname)}`;
+    let savedFileName = `images/${fileName[0]}-${Date.now()}${extname(file.originalname)}`;
     cb(null, savedFileName);
   },
 });

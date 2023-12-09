@@ -7,7 +7,7 @@ const PORT = process.env.PORT;
 
 const app = express();
 
-app.use(express.static('public/images'));
+app.use(express.static('public'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -13,9 +13,10 @@ const loginValidation = [
 
 const updateProfileValidation = [
   body('image').custom(async (value, { req }) => {
-    if (!req.file) throw new Error('Incorrect type of field, select File type.');
-    if (!req.file.mimetype.includes('image')) throw new Error('Only support images type.');
-    if (req.file.size > MAX_FILESIZE) throw new Error('Maximum filesize is 10MB.');
+    if (req.file) {
+      if (!req.file.mimetype.includes('image')) throw new Error('Only support images type.');
+      if (req.file.size > MAX_FILESIZE) throw new Error('Maximum filesize is 10MB.');
+    }
 
     return true;
   }),

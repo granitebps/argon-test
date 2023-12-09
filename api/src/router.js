@@ -5,11 +5,17 @@ const { upload } = require('./helper/index');
 const { verifyToken } = require('./helper/auth');
 const validate = require('./helper/validation');
 const { loginValidation, updateProfileValidation } = require('./validation/auth');
+const { listUser, createUser, updateUser } = require('./services/user_service');
+const { createUserValidation, updateUserValidation } = require('./validation/user');
 
 const router = express.Router();
 router.post('/login', validate(loginValidation), login);
 router.get('/me', verifyToken, me);
 
 router.put('/profile', verifyToken, upload.single('image'), validate(updateProfileValidation), updateProfile);
+
+router.get('/users', verifyToken, listUser);
+router.post('/users', verifyToken, upload.single('image'), validate(createUserValidation), createUser);
+router.put('/users/:id', verifyToken, upload.single('image'), validate(updateUserValidation), updateUser);
 
 module.exports = router;

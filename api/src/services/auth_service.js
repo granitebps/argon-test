@@ -50,11 +50,32 @@ const login = async (req, res) => {
 
   res.json({
     success: true,
-    message: 'Success login',
+    message: 'Success',
     data: {
       token,
     },
   });
 };
 
-module.exports = { login };
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+const me = async (req, res) => {
+  res.json({
+    success: true,
+    message: 'Success',
+    data: {
+      id: req.auth.id,
+      name: req.auth.name,
+      email: req.auth.email,
+      image: req.auth.image,
+      position: req.auth.position,
+      phone: req.auth.phone,
+      role: req.auth.role,
+    },
+  });
+};
+
+module.exports = { login, me };

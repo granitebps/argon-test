@@ -1,4 +1,36 @@
+const { Op } = require('sequelize');
 const { Attendance } = require('../models/index');
+
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+const summaryAttendance = async (req, res) => {
+  let start = new Date();
+  start.setDate(1);
+  let end = new Date();
+  end.setHours(0, 0, 0);
+  if (req.query.start && req.query.end) {
+    start = req.query.start;
+    end = req.query.end;
+  }
+
+  const data = await Attendance.findAll({
+    where: {
+      user_id: req.auth.id,
+      date: {
+        [Op.between]: [start, end],
+      },
+    },
+  });
+
+  res.json({
+    success: true,
+    message: 'Success',
+    data,
+  });
+};
 
 /**
  *
@@ -37,4 +69,4 @@ const storeAttendace = async (req, res) => {
   });
 };
 
-module.exports = { storeAttendace };
+module.exports = { storeAttendace, summaryAttendance };

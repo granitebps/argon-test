@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Attendance } = require('../models/index');
+const { Attendance, User } = require('../models/index');
 
 /**
  *
@@ -69,4 +69,27 @@ const storeAttendace = async (req, res) => {
   });
 };
 
-module.exports = { storeAttendace, summaryAttendance };
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
+const listAttendance = async (req, res) => {
+  const data = await Attendance.findAll({
+    include: [
+      {
+        model: User,
+        as: 'user',
+        attributes: ['id', 'name', 'email', 'position', 'phone'],
+      },
+    ],
+  });
+
+  res.json({
+    success: true,
+    message: 'Success',
+    data,
+  });
+};
+
+module.exports = { storeAttendace, summaryAttendance, listAttendance };

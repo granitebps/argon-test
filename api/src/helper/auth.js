@@ -1,5 +1,10 @@
 const jwt = require('jsonwebtoken');
 
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const verifyToken = async (req, res, next) => {
   try {
     const authToken = req.headers['authorization'];

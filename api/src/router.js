@@ -6,7 +6,7 @@ const validate = require('./middleware/validation');
 
 const { login, me, updateProfile } = require('./services/auth_service');
 const { storeAttendace, summaryAttendance, listAttendance, todayAttendance } = require('./services/attendance_service');
-const { listUser, createUser, updateUser } = require('./services/user_service');
+const { listUser, createUser, updateUser, getUser } = require('./services/user_service');
 
 const { loginValidation, updateProfileValidation } = require('./validation/auth');
 const { createUserValidation, updateUserValidation } = require('./validation/user');
@@ -20,6 +20,7 @@ router.get('/me', verifyToken, me);
 router.put('/profile', verifyToken, upload.single('image'), validate(updateProfileValidation), updateProfile);
 
 router.get('/users', verifyToken, verifyRole('admin'), listUser);
+router.get('/users/:id', verifyToken, verifyRole('admin'), getUser);
 router.post(
   '/users',
   verifyToken,

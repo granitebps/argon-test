@@ -6,6 +6,23 @@ const bcrypt = require('bcrypt');
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
+const getUser = async (req, res) => {
+  const users = await User.findByPk(req.params.id, {
+    attributes: ['id', 'name', 'email', 'position', 'phone', 'image'],
+  });
+
+  res.json({
+    success: true,
+    message: 'Success',
+    data: users,
+  });
+};
+
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const listUser = async (req, res) => {
   const users = await User.findAll({
     where: {
@@ -73,4 +90,4 @@ const updateUser = async (req, res) => {
   });
 };
 
-module.exports = { listUser, createUser, updateUser };
+module.exports = { listUser, createUser, updateUser, getUser };

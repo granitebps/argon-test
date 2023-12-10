@@ -54,6 +54,15 @@ const login = async (req, res) => {
     message: 'Success',
     data: {
       token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        image: user.image,
+        position: user.position,
+        phone: user.phone,
+        role: user.role,
+      },
     },
   });
 };
@@ -105,27 +114,40 @@ const updateProfile = async (req, res) => {
 
   // Logging
   const updatedUser = await User.findByPk(req.auth.id);
-  const message = {
-    user: {
+  try {
+    const message = {
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        image: updatedUser.image,
+        position: updatedUser.position,
+        phone: updatedUser.phone,
+      },
+    };
+    const { RABBIT_MQ_USERNAME, RABBIT_MQ_PASSWORD, RABBIT_MQ_HOST } = process.env;
+    const connection = await amqp.connect(`amqp://${RABBIT_MQ_USERNAME}:${RABBIT_MQ_PASSWORD}@${RABBIT_MQ_HOST}`);
+    const channel = await connection.createChannel();
+    await channel.assertQueue('logging', { durable: false });
+    channel.sendToQueue('logging', Buffer.from(JSON.stringify(message)));
+    console.log(' [x] Sent ', message);
+    await channel.close();
+  } catch (error) {
+    console.log('Failed to send message to logging: ', error);
+  }
+
+  res.json({
+    success: true,
+    message: 'Success',
+    data: {
       id: updatedUser.id,
       name: updatedUser.name,
       email: updatedUser.email,
       image: updatedUser.image,
       position: updatedUser.position,
       phone: updatedUser.phone,
+      role: updatedUser.role,
     },
-  };
-  const { RABBIT_MQ_USERNAME, RABBIT_MQ_PASSWORD, RABBIT_MQ_HOST } = process.env;
-  const connection = await amqp.connect(`amqp://${RABBIT_MQ_USERNAME}:${RABBIT_MQ_PASSWORD}@${RABBIT_MQ_HOST}`);
-  const channel = await connection.createChannel();
-  await channel.assertQueue('logging', { durable: false });
-  channel.sendToQueue('logging', Buffer.from(JSON.stringify(message)));
-  console.log(' [x] Sent ', message);
-  await channel.close();
-
-  res.json({
-    success: true,
-    message: 'Success',
   });
 };
 

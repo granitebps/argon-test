@@ -27,6 +27,9 @@ module.exports = (sequelize, DataTypes) => {
       role: {
         type: DataTypes.STRING,
       },
+      fcm_token: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,

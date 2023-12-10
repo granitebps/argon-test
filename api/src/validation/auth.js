@@ -9,6 +9,7 @@ const loginValidation = [
     .withMessage('Email is required')
     .isLength({ min: 8 })
     .withMessage('Password must be min 8 chars'),
+  body('fcm_token').optional({ values: 'falsy' }),
 ];
 
 const updateProfileValidation = [

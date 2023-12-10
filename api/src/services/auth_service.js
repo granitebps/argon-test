@@ -9,7 +9,7 @@ const amqp = require('amqplib');
  * @param {import('express').Response} res
  */
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, fcm_token } = req.body;
   /**
    * @type {import('sequelize').Model} user
    */
@@ -48,6 +48,10 @@ const login = async (req, res) => {
     process.env.JWT_SECRET
     // { expiresIn: 60 }
   );
+
+  // Save fcm token
+  user.fcm_token = fcm_token;
+  await user.save();
 
   res.json({
     success: true,

@@ -6,6 +6,29 @@ const { Attendance, User } = require('../models/index');
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
+const todayAttendance = async (req, res) => {
+  const today = new Date();
+  today.setHours(0, 0, 0);
+
+  const data = await Attendance.findOne({
+    where: {
+      user_id: req.auth.id,
+      date: today,
+    },
+  });
+
+  res.json({
+    success: true,
+    message: 'Success',
+    data,
+  });
+};
+
+/**
+ *
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 const summaryAttendance = async (req, res) => {
   let start = new Date();
   start.setDate(1);
@@ -92,4 +115,4 @@ const listAttendance = async (req, res) => {
   });
 };
 
-module.exports = { storeAttendace, summaryAttendance, listAttendance };
+module.exports = { storeAttendace, summaryAttendance, listAttendance, todayAttendance };

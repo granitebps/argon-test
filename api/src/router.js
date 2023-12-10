@@ -5,7 +5,7 @@ const { verifyToken, verifyRole } = require('./middleware/auth');
 const validate = require('./middleware/validation');
 
 const { login, me, updateProfile } = require('./services/auth_service');
-const { storeAttendace, summaryAttendance, listAttendance } = require('./services/attendance_service');
+const { storeAttendace, summaryAttendance, listAttendance, todayAttendance } = require('./services/attendance_service');
 const { listUser, createUser, updateUser } = require('./services/user_service');
 
 const { loginValidation, updateProfileValidation } = require('./validation/auth');
@@ -37,6 +37,7 @@ router.put(
   updateUser
 );
 
+router.get('/attendances/today', verifyToken, verifyRole('user'), todayAttendance);
 router.get('/attendances/summary', verifyToken, verifyRole('user'), summaryAttendance);
 router.get('/attendances', verifyToken, verifyRole('admin'), listAttendance);
 router.post('/attendances', verifyToken, verifyRole('user'), validate(attendanceValidation), storeAttendace);

@@ -80,23 +80,46 @@ const CreateUser = () => {
               </div>
               <div className='mb-3'>
                 <CFormLabel>Email</CFormLabel>
-                <CFormInput {...register('email', { required: 'Required' })} />
+                <CFormInput
+                  {...register('email', { required: 'Required' })}
+                  invalid={errors.email ? true : false}
+                  feedbackInvalid={errors?.email?.message}
+                />
               </div>
               <div className='mb-3'>
                 <CFormLabel>Image</CFormLabel>
-                <CFormInput type='file' id='formFile' {...register('image', { required: 'Required' })} />
+                <CFormInput
+                  type='file'
+                  id='formFile'
+                  {...register('image', { required: 'Required' })}
+                  invalid={errors.image ? true : false}
+                  feedbackInvalid={errors?.image?.message}
+                />
               </div>
               <div className='mb-3'>
                 <CFormLabel>Position</CFormLabel>
-                <CFormInput {...register('position', { required: 'Required' })} />
+                <CFormInput
+                  {...register('position', { required: 'Required' })}
+                  invalid={errors.position ? true : false}
+                  feedbackInvalid={errors?.position?.message}
+                />
               </div>
               <div className='mb-3'>
                 <CFormLabel>Phone Number</CFormLabel>
-                <CFormInput {...register('phone', { required: 'Required' })} />
+                <CFormInput
+                  {...register('phone', { required: 'Required' })}
+                  invalid={errors.phone ? true : false}
+                  feedbackInvalid={errors?.phone?.message}
+                />
               </div>
               <div className='mb-3'>
                 <CFormLabel>Change Password</CFormLabel>
-                <CFormInput type='password' {...register('password', { required: 'Required' })} />
+                <CFormInput
+                  type='password'
+                  {...register('password', { required: 'Required' })}
+                  invalid={errors.password ? true : false}
+                  feedbackInvalid={errors?.password?.message}
+                />
               </div>
 
               <CButton color='primary' type='submit'>

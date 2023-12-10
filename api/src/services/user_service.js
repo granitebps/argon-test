@@ -68,12 +68,13 @@ const createUser = async (req, res) => {
  */
 const updateUser = async (req, res) => {
   const id = req.params.id;
-  const { name, email, position, phone } = req.body;
+  const { name, email, position, phone, password } = req.body;
   const payload = {
     name,
     email,
     position,
     phone,
+    password: await bcrypt.hash(password, 10),
   };
   if (req.file) {
     payload.image = req.file.filename;

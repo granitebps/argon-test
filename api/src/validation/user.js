@@ -10,9 +10,16 @@ const createUserValidation = [
 
     return true;
   }),
+  body('name').notEmpty().withMessage('Name is required'),
   body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Not a valid email'),
   body('position').notEmpty().withMessage('Position is required'),
   body('phone').notEmpty().withMessage('Phone is required'),
+  body('password')
+    .notEmpty()
+    .withMessage('Password is required')
+    .isLength({ min: 8 })
+    .withMessage('Password must be min 8 chars'),
+  ,
 ];
 
 const updateUserValidation = [
@@ -24,9 +31,12 @@ const updateUserValidation = [
 
     return true;
   }),
+  body('name').notEmpty().withMessage('Name is required'),
   body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Not a valid email'),
   body('position').notEmpty().withMessage('Position is required'),
   body('phone').notEmpty().withMessage('Phone is required'),
+  body('password').optional({ values: 'falsy' }).isLength({ min: 8 }).withMessage('Password must be min 8 chars'),
+  ,
 ];
 
 module.exports = { createUserValidation, updateUserValidation };

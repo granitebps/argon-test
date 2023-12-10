@@ -50,6 +50,11 @@ const Login = () => {
         password,
       });
 
+      if (data.data.user.role != 'user') {
+        setError('Email or password incorrect');
+        return;
+      }
+
       localStorage.setItem('aat', data.data.token);
       localStorage.setItem('aatu', JSON.stringify(data.data.user));
       navigate('/dashboard');

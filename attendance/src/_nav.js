@@ -1,19 +1,7 @@
 import React from 'react';
 import CIcon from '@coreui/icons-react';
-import {
-  cilBell,
-  cilCalculator,
-  cilChartPie,
-  cilCursor,
-  cilDescription,
-  cilDrop,
-  cilNotes,
-  cilPencil,
-  cilPuzzle,
-  cilSpeedometer,
-  cilStar,
-} from '@coreui/icons';
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react';
+import { cilSpeedometer, cilUser } from '@coreui/icons';
+import { CNavItem } from '@coreui/react';
 
 const _nav = [
   {
@@ -21,6 +9,12 @@ const _nav = [
     name: 'Dashboard',
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName='nav-icon' />,
+  },
+  {
+    component: CNavItem,
+    name: 'Profile',
+    to: '/profile',
+    icon: <CIcon icon={cilUser} customClassName='nav-icon' />,
   },
 ];
 

@@ -51,6 +51,7 @@ const Login = () => {
       });
 
       localStorage.setItem('at', data.data.token);
+      localStorage.setItem('atu', JSON.stringify(data.data.user));
       navigate('/dashboard');
     } catch (error) {
       setError(error.response.data.message);

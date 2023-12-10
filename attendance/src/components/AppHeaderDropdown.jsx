@@ -22,6 +22,10 @@ const AppHeaderDropdown = () => {
     navigate('/', { replace: true });
   };
 
+  const handleProfile = () => {
+    navigate('/profile', { replace: true });
+  };
+
   return (
     <CDropdown variant='nav-item'>
       <CDropdownToggle placement='bottom-end' className='py-0' caret={false}>
@@ -29,7 +33,7 @@ const AppHeaderDropdown = () => {
       </CDropdownToggle>
       <CDropdownMenu className='pt-0' placement='bottom-end'>
         <CDropdownHeader className='bg-light fw-semibold py-2'>Settings</CDropdownHeader>
-        <CDropdownItem href='#'>
+        <CDropdownItem href='#' onClick={handleProfile}>
           <CIcon icon={cilUser} className='me-2' />
           Profile
         </CDropdownItem>

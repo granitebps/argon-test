@@ -46,6 +46,7 @@ const summaryAttendance = async (req, res) => {
         [Op.between]: [start, end],
       },
     },
+    order: [['date', 'DESC']],
   });
 
   res.json({
@@ -111,6 +112,7 @@ const listAttendance = async (req, res) => {
         attributes: ['id', 'name', 'email', 'position', 'phone'],
       },
     ],
+    order: [['date', 'DESC']],
   });
 
   res.json({

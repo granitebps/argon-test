@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const authToken = localStorage.getItem('at');
+  const authToken = localStorage.getItem('aat');
   if (!authToken) {
     return <Navigate replace to='/' />;
   }

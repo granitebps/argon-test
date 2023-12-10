@@ -26,7 +26,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const authToken = localStorage.getItem('at');
+  const authToken = localStorage.getItem('aat');
   if (authToken) {
     return <Navigate replace to='/dashboard' />;
   }
@@ -50,8 +50,8 @@ const Login = () => {
         password,
       });
 
-      localStorage.setItem('at', data.data.token);
-      localStorage.setItem('atu', JSON.stringify(data.data.user));
+      localStorage.setItem('aat', data.data.token);
+      localStorage.setItem('aatu', JSON.stringify(data.data.user));
       navigate('/dashboard');
     } catch (error) {
       setError(error.response.data.message);

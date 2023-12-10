@@ -20,12 +20,12 @@ const AppHeaderDropdown = () => {
   const [avatar, setAvatar] = useState('');
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('atu'));
+    const user = JSON.parse(localStorage.getItem('aatu'));
     setAvatar(`${process.env.REACT_APP_API_URL}/${user.image}`);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('at');
+    localStorage.removeItem('aat');
     navigate('/', { replace: true });
   };
 

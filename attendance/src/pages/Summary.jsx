@@ -28,7 +28,7 @@ const Summary = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const token = localStorage.getItem('at');
+        const token = localStorage.getItem('aat');
         const { data } = await axios.get('/attendances/summary', {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ const Summary = () => {
 
     try {
       const searchParams = new URLSearchParams(payload);
-      const token = localStorage.getItem('at');
+      const token = localStorage.getItem('aat');
       const { data } = await axios.get(`/attendances/summary?${searchParams.toString()}`, {
         headers: {
           Authorization: `Bearer ${token}`,

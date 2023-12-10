@@ -8,7 +8,7 @@ const Attendance = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const token = localStorage.getItem('at');
+        const token = localStorage.getItem('aat');
         const { data } = await axios.get('/attendances/today', {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -26,7 +26,7 @@ const Attendance = () => {
 
   const handleAttendance = async (type) => {
     try {
-      const token = localStorage.getItem('at');
+      const token = localStorage.getItem('aat');
       const time = new Date();
       const hour = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
       const minute = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();

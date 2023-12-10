@@ -26,12 +26,12 @@ const Profile = () => {
   const [image, setImage] = useState();
 
   useEffect(() => {
-    const authToken = localStorage.getItem('at');
+    const authToken = localStorage.getItem('aat');
     if (!authToken) {
       return navigate('/', { replace: true });
     }
 
-    const auth = JSON.parse(localStorage.getItem('atu'));
+    const auth = JSON.parse(localStorage.getItem('aatu'));
     setUser(auth);
     setPhone(auth.phone);
   }, []);
@@ -59,7 +59,7 @@ const Profile = () => {
         formData.append('password', password);
       }
 
-      const token = localStorage.getItem('at');
+      const token = localStorage.getItem('aat');
       const { data } = await axios.put('/profile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -68,7 +68,7 @@ const Profile = () => {
       });
       console.log(data.data);
       setUser(data.data);
-      localStorage.setItem('atu', JSON.stringify(data.data));
+      localStorage.setItem('aatu', JSON.stringify(data.data));
       setSuccess('You have successfully update your profile');
       setPassword('');
     } catch (error) {

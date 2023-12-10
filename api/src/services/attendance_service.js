@@ -74,7 +74,7 @@ const storeAttendace = async (req, res) => {
     },
   });
   if (!att) {
-    await Attendance.create({
+    att = await Attendance.create({
       user_id: user.id,
       clock_in,
       clock_out,
@@ -89,6 +89,11 @@ const storeAttendace = async (req, res) => {
   res.json({
     success: true,
     message: 'Success',
+    data: {
+      clock_in: att.clock_in,
+      clock_out: att.clock_out,
+      date: att.date,
+    },
   });
 };
 

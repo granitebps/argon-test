@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models/index');
 const bcrypt = require('bcrypt');
 const amqp = require('amqplib');
+const admin = require('../firebase');
+const { Op } = require('sequelize');
 
 /**
  *
@@ -114,7 +116,40 @@ const updateProfile = async (req, res) => {
     },
   });
 
-  // TODO: Notification
+  // Notification
+  const admins = await User.findAll({
+    where: {
+      role: 'admin',
+      fcm_token: {
+        [Op.not]: null,
+      },
+    },
+  });
+  const registrationTokens = admins.map((a) => a.fcm_token);
+  const message = {
+    data: {
+      message: `User with email ${req.auth.email} has changed their profile`,
+    },
+    notification: {
+      title: `User with email ${req.auth.email} has changed their profile`,
+    },
+    tokens: registrationTokens,
+  };
+  admin
+    .messaging()
+    .sendEachForMulticast(message)
+    .then((response) => {
+      console.log(response.successCount + ' messages were sent successfully');
+      if (response.failureCount > 0) {
+        const failedTokens = [];
+        response.responses.forEach((resp, idx) => {
+          if (!resp.success) {
+            failedTokens.push(registrationTokens[idx]);
+          }
+        });
+        console.log('List of tokens that caused failures: ' + failedTokens);
+      }
+    });
 
   // Logging
   const updatedUser = await User.findByPk(req.auth.id);

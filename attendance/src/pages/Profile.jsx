@@ -66,7 +66,6 @@ const Profile = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(data.data);
       setUser(data.data);
       localStorage.setItem('aatu', JSON.stringify(data.data));
       setSuccess('You have successfully update your profile');

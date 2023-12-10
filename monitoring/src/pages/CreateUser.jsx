@@ -26,10 +26,6 @@ const CreateUser = () => {
     formState: { errors },
   } = useForm();
 
-  const onError = (err) => {
-    console.log('error:', err, errors);
-  };
-
   const handleCreate = async (payload) => {
     try {
       const formData = new FormData();
@@ -68,7 +64,7 @@ const CreateUser = () => {
                 {success}
               </CAlert>
             )}
-            <CForm onSubmit={handleSubmit(handleCreate, onError)}>
+            <CForm onSubmit={handleSubmit(handleCreate)}>
               <div className='mb-3'>
                 <CFormLabel>Name</CFormLabel>
                 {errors.name ? errors.name.message : ''}

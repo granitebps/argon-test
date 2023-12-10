@@ -17,6 +17,7 @@ import CIcon from '@coreui/icons-react';
 import { cilLockLocked, cilEnvelopeClosed } from '@coreui/icons';
 import axios from 'axios';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { getFirebaseToken } from '../FirebaseConfig';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -45,9 +46,14 @@ const Login = () => {
         return;
       }
 
+      // Get FCM Token
+      const fcm_token = await getFirebaseToken();
+      console.log({ fcm_token });
+
       const { data } = await axios.post('/login', {
         email,
         password,
+        fcm_token,
       });
 
       if (data.data.user.role != 'admin') {

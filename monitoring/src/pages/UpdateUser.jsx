@@ -49,10 +49,6 @@ const UpdateUser = () => {
     load();
   }, [params.id]);
 
-  const onError = (err) => {
-    console.log('error:', err, errors);
-  };
-
   const handleUpdate = async (payload) => {
     try {
       const formData = new FormData();
@@ -103,7 +99,7 @@ const UpdateUser = () => {
                 {success}
               </CAlert>
             )}
-            <CForm onSubmit={handleSubmit(handleUpdate, onError)}>
+            <CForm onSubmit={handleSubmit(handleUpdate)}>
               <div className='mb-3'>
                 <CFormLabel>Name</CFormLabel>
                 <CFormInput

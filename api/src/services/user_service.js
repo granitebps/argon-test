@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { User } = require('../models/index');
 const bcrypt = require('bcrypt');
 
@@ -45,6 +46,20 @@ const listUser = async (req, res) => {
  */
 const createUser = async (req, res) => {
   const { name, email, position, phone, password } = req.body;
+
+  const exists = await User.findOne({
+    where: {
+      email,
+    },
+  });
+  if (exists) {
+    res.status(422).json({
+      success: false,
+      message: 'Email already exists',
+    });
+    return;
+  }
+
   await User.create({
     name,
     email,
@@ -69,6 +84,23 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const id = req.params.id;
   const { name, email, position, phone, password } = req.body;
+
+  const exists = await User.findOne({
+    where: {
+      email,
+      id: {
+        [Op.ne]: id,
+      },
+    },
+  });
+  if (exists) {
+    res.status(422).json({
+      success: false,
+      message: 'Email already exists',
+    });
+    return;
+  }
+
   const payload = {
     name,
     email,

@@ -15,8 +15,10 @@ import {
   CButton,
 } from '@coreui/react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Users = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -75,7 +77,16 @@ const Users = () => {
                       />
                     </CTableDataCell>
                     <CTableDataCell>
-                      <CButton color='primary'>Update</CButton>
+                      <CButton
+                        color='primary'
+                        onClick={() =>
+                          navigate(`/users/${a.id}`, {
+                            replace: true,
+                          })
+                        }
+                      >
+                        Update
+                      </CButton>
                     </CTableDataCell>
                   </CTableRow>
                 ))}

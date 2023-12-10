@@ -13,64 +13,75 @@ import {
   CRow,
 } from '@coreui/react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
-const Profile = () => {
+const UpdateUser = () => {
+  const params = useParams();
   const navigate = useNavigate();
-  const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState('');
-  const [user, setUser] = useState('');
-  const [phoneInvalid, setPhoneInvalid] = useState('');
+  const [user, setUser] = useState();
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [image, setImage] = useState();
 
-  useEffect(() => {
-    const authToken = localStorage.getItem('mat');
-    if (!authToken) {
-      return navigate('/', { replace: true });
-    }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-    const auth = JSON.parse(localStorage.getItem('mata'));
-    setUser(auth);
-    setPhone(auth.phone);
-  }, []);
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const authToken = localStorage.getItem('mat');
+        if (!authToken) {
+          return navigate('/', { replace: true });
+        }
+        const { data } = await axios.get(`/users/${params.id}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+        setUser(data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    load();
+  }, [params.id]);
 
   const handleImage = (e) => {
     setImage(e.target.files[0]);
   };
 
-  const handleUpdateProfile = async (e) => {
-    setError('');
-    setSuccess('');
-    e.preventDefault();
-    try {
-      if (phone == '') {
-        setPhoneInvalid('Phone is required');
-        return;
-      }
+  const onError = (err) => {
+    console.log('error:', err, errors);
+  };
 
+  const handleUpdate = async (payload) => {
+    try {
       const formData = new FormData();
-      formData.append('phone', phone);
+      formData.append('name', payload.name);
+      formData.append('email', payload.email);
+      formData.append('position', payload.position);
+      formData.append('phone', payload.phone);
+      if (payload.password) {
+        formData.append('password', payload.password);
+      }
       if (image) {
         formData.append('image', image);
       }
-      if (password != '') {
-        formData.append('password', password);
-      }
 
       const token = localStorage.getItem('mat');
-      const { data } = await axios.put('/profile', formData, {
+      await axios.put(`users/${params.id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
       });
-      setUser(data.data);
-      localStorage.setItem('mata', JSON.stringify(data.data));
-      setSuccess('You have successfully update your profile');
-      setPassword('');
+      navigate('/users', { replace: true });
     } catch (error) {
+      console.log(error);
       setError(error.response.data.message);
     }
   };
@@ -88,7 +99,7 @@ const Profile = () => {
       <CCol xs={12}>
         <CCard className='mb-4'>
           <CCardHeader>
-            <strong>Update Profile</strong>
+            <strong>Update User</strong>
           </CCardHeader>
           <CCardBody>
             {error != '' && <CAlert color='danger'>{error}</CAlert>}
@@ -97,14 +108,20 @@ const Profile = () => {
                 {success}
               </CAlert>
             )}
-            <CForm onSubmit={handleUpdateProfile}>
+            <CForm onSubmit={handleSubmit(handleUpdate, onError)}>
               <div className='mb-3'>
                 <CFormLabel>Name</CFormLabel>
-                <CFormInput defaultValue={user.name} disabled />
+                {errors.name ? errors.name.message : ''}
+                <CFormInput
+                  defaultValue={user.name}
+                  {...register('name', { required: 'Required' })}
+                  invalid={errors.name ? true : false}
+                  feedbackInvalid={errors?.name?.message}
+                />
               </div>
               <div className='mb-3'>
                 <CFormLabel>Email</CFormLabel>
-                <CFormInput defaultValue={user.email} disabled />
+                <CFormInput defaultValue={user.email} {...register('email', { required: 'Required' })} />
               </div>
               <div className='mb-3'>
                 <CFormLabel>Image</CFormLabel>
@@ -120,20 +137,15 @@ const Profile = () => {
               </div>
               <div className='mb-3'>
                 <CFormLabel>Position</CFormLabel>
-                <CFormInput defaultValue={user.position} disabled />
+                <CFormInput defaultValue={user.position} {...register('position', { required: 'Required' })} />
               </div>
               <div className='mb-3'>
                 <CFormLabel>Phone Number</CFormLabel>
-                <CFormInput
-                  defaultValue={phone}
-                  invalid={phoneInvalid != ''}
-                  feedbackInvalid={phoneInvalid}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
+                <CFormInput defaultValue={user.phone} {...register('phone', { required: 'Required' })} />
               </div>
               <div className='mb-3'>
                 <CFormLabel>Change Password</CFormLabel>
-                <CFormInput type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                <CFormInput type='password' {...register('password')} />
               </div>
 
               <CButton color='primary' type='submit'>
@@ -147,4 +159,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default UpdateUser;

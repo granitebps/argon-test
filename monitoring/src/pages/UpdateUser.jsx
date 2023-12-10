@@ -22,7 +22,6 @@ const UpdateUser = () => {
   const [user, setUser] = useState();
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [image, setImage] = useState();
 
   const {
     register,
@@ -50,10 +49,6 @@ const UpdateUser = () => {
     load();
   }, [params.id]);
 
-  const handleImage = (e) => {
-    setImage(e.target.files[0]);
-  };
-
   const onError = (err) => {
     console.log('error:', err, errors);
   };
@@ -68,8 +63,8 @@ const UpdateUser = () => {
       if (payload.password) {
         formData.append('password', payload.password);
       }
-      if (image) {
-        formData.append('image', image);
+      if (payload.image.length > 0) {
+        formData.append('image', payload.image[0]);
       }
 
       const token = localStorage.getItem('mat');
@@ -111,7 +106,6 @@ const UpdateUser = () => {
             <CForm onSubmit={handleSubmit(handleUpdate, onError)}>
               <div className='mb-3'>
                 <CFormLabel>Name</CFormLabel>
-                {errors.name ? errors.name.message : ''}
                 <CFormInput
                   defaultValue={user.name}
                   {...register('name', { required: 'Required' })}
@@ -121,11 +115,16 @@ const UpdateUser = () => {
               </div>
               <div className='mb-3'>
                 <CFormLabel>Email</CFormLabel>
-                <CFormInput defaultValue={user.email} {...register('email', { required: 'Required' })} />
+                <CFormInput
+                  defaultValue={user.email}
+                  {...register('email', { required: 'Required' })}
+                  invalid={errors.email ? true : false}
+                  feedbackInvalid={errors?.email?.message}
+                />
               </div>
               <div className='mb-3'>
                 <CFormLabel>Image</CFormLabel>
-                <CFormInput type='file' id='formFile' onChange={handleImage} />
+                <CFormInput type='file' id='formFile' {...register('image')} />
                 <CImage
                   rounded
                   thumbnail
@@ -137,11 +136,21 @@ const UpdateUser = () => {
               </div>
               <div className='mb-3'>
                 <CFormLabel>Position</CFormLabel>
-                <CFormInput defaultValue={user.position} {...register('position', { required: 'Required' })} />
+                <CFormInput
+                  defaultValue={user.position}
+                  {...register('position', { required: 'Required' })}
+                  invalid={errors.position ? true : false}
+                  feedbackInvalid={errors?.position?.message}
+                />
               </div>
               <div className='mb-3'>
                 <CFormLabel>Phone Number</CFormLabel>
-                <CFormInput defaultValue={user.phone} {...register('phone', { required: 'Required' })} />
+                <CFormInput
+                  defaultValue={user.phone}
+                  {...register('phone', { required: 'Required' })}
+                  invalid={errors.phone ? true : false}
+                  feedbackInvalid={errors?.phone?.message}
+                />
               </div>
               <div className='mb-3'>
                 <CFormLabel>Change Password</CFormLabel>

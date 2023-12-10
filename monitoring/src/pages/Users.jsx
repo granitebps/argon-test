@@ -44,6 +44,9 @@ const Users = () => {
         <CCard className='mb-4'>
           <CCardHeader>
             <strong>Users</strong>
+            <CButton className='float-end' onClick={() => navigate('/users-create', { replace: true })}>
+              Create
+            </CButton>
           </CCardHeader>
           <CCardBody>
             <CTable striped hover>

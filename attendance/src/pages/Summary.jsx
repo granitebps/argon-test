@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  CButton,
   CCard,
   CCardBody,
   CCardHeader,
@@ -13,9 +14,16 @@ import {
   CTableRow,
 } from '@coreui/react';
 import axios from 'axios';
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css';
+import 'react-calendar/dist/Calendar.css';
+
+const now = new Date();
+const startMonth = new Date().setDate(1);
 
 const Summary = () => {
   const [attendances, setAttendances] = useState([]);
+  const [dates, setDates] = useState([startMonth, now]);
 
   useEffect(() => {
     const load = async () => {
@@ -26,7 +34,6 @@ const Summary = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(data.data);
         setAttendances(
           data.data.map((a) => ({
             ...a,
@@ -41,6 +48,39 @@ const Summary = () => {
     load();
   }, []);
 
+  const handleFilter = async () => {
+    let start = new Date();
+    let end = new Date();
+    start.setDate(1);
+    if (dates) {
+      start = new Date(dates[0]);
+      end = new Date(dates[1]);
+    }
+    const payload = {
+      start: `${start.getFullYear()}-${start.getMonth() + 1}-${start.getDate()}`,
+      end: `${end.getFullYear()}-${end.getMonth() + 1}-${end.getDate()}`,
+    };
+
+    try {
+      const searchParams = new URLSearchParams(payload);
+      const token = localStorage.getItem('at');
+      const { data } = await axios.get(`/attendances/summary?${searchParams.toString()}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setAttendances(
+        data.data.map((a) => ({
+          ...a,
+          clock_in: `${a.date} ${a.clock_in}`,
+          clock_out: `${a.date} ${a.clock_out}`,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <CRow>
       <CCol xs={12}>
@@ -49,6 +89,23 @@ const Summary = () => {
             <strong>Summary Attendance</strong>
           </CCardHeader>
           <CCardBody>
+            <CRow>
+              <CCol xs={6}>
+                <DateRangePicker
+                  onChange={setDates}
+                  value={dates}
+                  showLeadingZeros
+                  format='y-MM-dd'
+                  rangeDivider=' to '
+                />
+              </CCol>
+              <CCol>
+                <CButton color='primary' onClick={handleFilter}>
+                  Filter
+                </CButton>
+              </CCol>
+            </CRow>
+
             <CTable striped hover>
               <CTableHead>
                 <CTableRow>

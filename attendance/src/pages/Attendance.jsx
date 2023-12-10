@@ -11,7 +11,6 @@ const Attendance = () => {
         const token = localStorage.getItem('at');
         const { data } = await axios.get('/attendances/today', {
           headers: {
-            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,
           },
         });

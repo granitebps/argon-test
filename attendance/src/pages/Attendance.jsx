@@ -47,7 +47,10 @@ const Attendance = () => {
   };
 
   const handleDate = (date) => {
-    const res = new Date(date);
+    let res = new Date();
+    if (date) {
+      res = new Date(date);
+    }
     res.setHours(0, 0, 0, 0);
     return res.toDateString();
   };

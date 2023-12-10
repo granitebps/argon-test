@@ -44,13 +44,13 @@ const listUser = async (req, res) => {
  * @param {import('express').Response} res
  */
 const createUser = async (req, res) => {
-  const { name, email, position, phone } = req.body;
+  const { name, email, position, phone, password } = req.body;
   await User.create({
     name,
     email,
     position,
     phone,
-    password: await bcrypt.hash('password', 10),
+    password: await bcrypt.hash(password, 10),
     role: 'user',
     image: req.file.filename,
   });
@@ -74,8 +74,10 @@ const updateUser = async (req, res) => {
     email,
     position,
     phone,
-    password: await bcrypt.hash(password, 10),
   };
+  if (password) {
+    payload.password = await bcrypt.hash(password, 10);
+  }
   if (req.file) {
     payload.image = req.file.filename;
   }

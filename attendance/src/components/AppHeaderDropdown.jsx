@@ -12,10 +12,17 @@ import { cilLockLocked, cilUser } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { useNavigate } from 'react-router-dom';
 
-import avatar8 from '../assets/images/avatars/8.jpg';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 const AppHeaderDropdown = () => {
   const navigate = useNavigate();
+  const [avatar, setAvatar] = useState('');
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('atu'));
+    setAvatar(`${process.env.REACT_APP_API_URL}/${user.image}`);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('at');
@@ -29,7 +36,7 @@ const AppHeaderDropdown = () => {
   return (
     <CDropdown variant='nav-item'>
       <CDropdownToggle placement='bottom-end' className='py-0' caret={false}>
-        <CAvatar src={avatar8} size='md' />
+        <CAvatar src={avatar} size='md' />
       </CDropdownToggle>
       <CDropdownMenu className='pt-0' placement='bottom-end'>
         <CDropdownHeader className='bg-light fw-semibold py-2'>Settings</CDropdownHeader>
